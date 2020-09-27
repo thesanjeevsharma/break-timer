@@ -1,7 +1,7 @@
 const { app, BrowserWindow, Menu } = require("electron");
 
 const isMac = process.platform === "darwin";
-const isInDevelopment = true;
+const isInDevelopment = false;
 
 let win;
 
