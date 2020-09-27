@@ -80,7 +80,8 @@
                } else {
                   breakMode()
                   const notification = new Notification('Break Time!', {
-                     body: `Relax for ${Math.floor(interval / 60)} minutes.`,
+                     body: `Relax for ${Math.floor(interval / 60)} minute${Math.floor(interval / 60) > 1 ? 's' : ''
+                        }.`,
                      icon: 'icons/relax.png'
                   })
                }
@@ -104,7 +105,8 @@
                } else {
                   workMode()
                   const notification = new Notification('Back to Work!', {
-                     body: `Another break in ${Math.floor(time / 60)} minutes.`,
+                     body: `Another break in ${Math.floor(time / 60)} minute${Math.floor(time / 60) > 1 ? 's' : ''
+                        }.`,
                      icon: 'icons/work.png'
                   })
                }
