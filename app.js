@@ -1,7 +1,7 @@
-process.env.NODE_ENV = "development";
 const { app, BrowserWindow, Menu } = require("electron");
 
 const isMac = process.platform === "darwin";
+const isInDevelopment = true;
 
 let win;
 
@@ -67,7 +67,7 @@ const template = [
       },
       {
         label: "Quit",
-        accelerator: isMac ? "Command+Q" : "Ctrl+Q",
+        accelerator: "CmdOrCtrl+Q",
         click() {
           app.quit();
         },
@@ -88,6 +88,22 @@ const template = [
       },
     ],
   },
+  ...(isInDevelopment
+    ? [
+        {
+          label: "Tools",
+          submenu: [
+            {
+              label: "Developer Tools",
+              accelerator: "CmdOrCtrl+Shift+I",
+              click(item, focusedWindow) {
+                focusedWindow.toggleDevTools();
+              },
+            },
+          ],
+        },
+      ]
+    : []),
 ];
 
 app.whenReady().then(createWindow);
