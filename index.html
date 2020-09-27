@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Break Timer</title>
+   <link href="styles.css" rel="stylesheet" />
+</head>
+
+<body>
+   <div class="container">
+      <div class="form">
+         <label>Work Time (minutes)</label>
+         <input id="time" type="number" maxlength="4" min="15" step="5" required />
+         <label>Break Time (minutes)</label>
+         <input id="interval" type="number" maxlength="4" min="1" required />
+         <button class="btn" id="save">Save</button>
+      </div>
+      <div class="clock">
+         <div class="clock-wrapper">
+            <svg height="100%" width="100%">
+               <circle id="clock-progress" cx="50%" cy="50%" r="65" stroke="#7E62F6" stroke-width="2" fill="none" />
+            </svg>
+            <div class="display">
+               <span id="text">0</span>
+               <span id="sub-text">minutes left</span>
+               <span id="mode">Work</span>
+            </div>
+         </div>
+         <div class="clock-actions">
+            <button class="btn" id="switch">Start</button>
+            <button class="btn" id="reset">Reset</button>
+         </div>
+      </div>
+   </div>
+
+   <script>
+      let time, interval, timer
+      let isRunning = false
+
+      const text = document.querySelector("#text")
+      const mode = document.querySelector("#mode")
+      const timeInput = document.querySelector("#time")
+      const intervalInput = document.querySelector("#interval")
+      const circle = document.querySelector('#clock-progress')
+      const saveBtn = document.querySelector("#save")
+      const switchBtn = document.querySelector("#switch")
+      const resetBtn = document.querySelector("#reset")
+
+      circle.style.strokeDasharray = Math.PI * 65 * 2
+      circle.style.strokeDashoffset = Math.PI * 65 * 2
+
+      function workMode() {
+         if (timer) clearInterval(timer)
+         circle.setAttribute('stroke', '#7E62F6')
+         text.style.color = '#7E62F6'
+         mode.innerHTML = 'Work'
+         let t = time
+         timer = setInterval(function () {
+            if (isRunning) {
+               text.innerHTML = Math.floor(t / 60)
+               if (t) {
+                  t -= 1
+                  const percent = t / time
+                  circle.style.strokeDashoffset = Math.PI * 65 * 2 - (Math.PI * 65 * 2 * percent)
+               } else {
+                  breakMode()
+                  const notification = new Notification('Break Time!', {
+                     body: `Relax for ${Math.floor(interval / 60)} minutes.`
+                  })
+               }
+            }
+         }, 1000)
+      }
+
+      function breakMode() {
+         if (timer) clearInterval(timer)
+         circle.setAttribute('stroke', '#F2AC6A')
+         text.style.color = '#F2AC6A'
+         mode.innerHTML = 'Break'
+         let t = interval
+         timer = setInterval(function () {
+            if (isRunning) {
+               text.innerHTML = Math.floor(t / 60)
+               if (t) {
+                  t -= 1
+                  const percent = t / interval
+                  circle.style.strokeDashoffset = Math.PI * 65 * 2 - (Math.PI * 65 * 2 * percent)
+               } else {
+                  workMode()
+                  const notification = new Notification('Back to Work!', {
+                     body: `Another break in ${Math.floor(time / 60)} minutes.`
+                  })
+               }
+            }
+         }, 1000)
+      }
+
+      saveBtn.addEventListener('click', () => {
+         if (timeInput.value >= 1 && intervalInput.value >= 1) {
+            time = timeInput.value * 60
+            interval = intervalInput.value * 60
+         }
+      })
+
+      switchBtn.addEventListener('click', () => {
+         if (time && interval) {
+            if (isRunning) {
+               isRunning = false
+               switchBtn.style.boxShadow = '3px 3px 8px #b1b1b1, -3px -3px 8px #ffffff'
+               switchBtn.innerHTML = 'Start'
+               switchBtn.style.color = ' #7E62F6'
+            } else {
+               isRunning = true
+               switchBtn.style.boxShadow = 'inset 3px 3px 8px #b1b1b1, inset -3px -3px 8px #ffffff'
+               switchBtn.innerHTML = 'Stop'
+               switchBtn.style.color = '#F2AC6A'
+               if (!timer) {
+                  workMode()
+               }
+            }
+         }
+      })
+
+      resetBtn.addEventListener('click', () => {
+         if (time && interval) {
+            if (timer) clearInterval(timer)
+            isRunning = false
+            switchBtn.style.boxShadow = '3px 3px 8px #b1b1b1, -3px -3px 8px #ffffff'
+            switchBtn.innerHTML = 'Start'
+            switchBtn.style.color = ' #7E62F6'
+            circle.setAttribute('stroke', '#7E62F6')
+            text.style.color = '#7E62F6'
+            mode.innerHTML = 'Work'
+            circle.style.strokeDashoffset = Math.PI * 65 * 2
+            text.innerHTML = Math.floor(time / 60)
+         }
+      })
+   </script>
+</body>
+
+</html>
