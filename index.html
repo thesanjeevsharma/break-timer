@@ -67,7 +67,8 @@
                } else {
                   breakMode()
                   const notification = new Notification('Break Time!', {
-                     body: `Relax for ${Math.floor(interval / 60)} minutes.`
+                     body: `Relax for ${Math.floor(interval / 60)} minutes.`,
+                     icon: 'icons/relax.png'
                   })
                }
             }
@@ -90,7 +91,8 @@
                } else {
                   workMode()
                   const notification = new Notification('Back to Work!', {
-                     body: `Another break in ${Math.floor(time / 60)} minutes.`
+                     body: `Another break in ${Math.floor(time / 60)} minutes.`,
+                     icon: 'icons/work.png'
                   })
                }
             }
