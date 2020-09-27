@@ -1,6 +1,6 @@
 {
   "name": "break-timer",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Break timer for digital well-being",
   "main": "app.js",
   "scripts": {
