@@ -51,6 +51,19 @@
       circle.style.strokeDasharray = Math.PI * 65 * 2
       circle.style.strokeDashoffset = Math.PI * 65 * 2
 
+      loadData()
+
+      function loadData() {
+         const storedTime = +localStorage.getItem("time")
+         const storedInterval = +localStorage.getItem("interval")
+         if (storedTime && storedInterval) {
+            time = storedTime * 60
+            timeInput.value = storedTime
+            interval = storedInterval * 60
+            intervalInput.value = storedInterval
+         }
+      }
+
       function workMode() {
          if (timer) clearInterval(timer)
          circle.setAttribute('stroke', '#7E62F6')
@@ -103,6 +116,8 @@
          if (timeInput.value >= 1 && intervalInput.value >= 1) {
             time = timeInput.value * 60
             interval = intervalInput.value * 60
+            localStorage.setItem("time", timeInput.value)
+            localStorage.setItem("interval", timeInput.value)
          }
       })
 
